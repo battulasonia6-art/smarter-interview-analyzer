@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Smarter Interview Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background: linear-gradient(to right,#7c8cff 0%,#cfd5ff 50%,#7c8cff 100%);
+}
+.register-area{
+    width:420px; /* bigger width */
+    background: rgba(25, 25, 50, 0.95); /* dark but text visible */
+    border-radius:12px;
+    padding:35px;
+    font-family:'Poppins',sans-serif;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3); /* subtle shadow for contrast */
+}
+.register-area h2{
+    font-size:24px;
+    font-weight:700;
+    color:#fff;
+    margin-bottom:15px;
+    text-align:center;
+}
+.subtitle{
+    font-size:14px;
+    color:#ddd;
+    margin-bottom:20px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    padding-bottom:8px;
+    text-align:center;
+}
+.input-group{position:relative;margin-bottom:20px;}
+.input-group i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#ccc;}
+.input-group input{
+    width:100%;
+    padding:12px 10px 12px 35px;
+    border:1px solid #777;
+    border-radius:6px;
+    background: rgba(255,255,255,0.1);
+    color:white; /* visible text */
+}
+.register-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    background:#3a4ed5;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:5px;
+}
+.register-btn:hover{background:#2c3dbb;}
+.error-msg{
+    color:#ff6666;
+    font-size:14px;
+    margin-bottom:10px;
+    text-align:center;
+}
+.login-link{
+    margin-top:10px;
+    text-align:center;
+    font-size:14px;
+}
+.login-link a{color:#3a4ed5;font-weight:600;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="register-area">
+    <h2><i class="fa-solid fa-user-plus"></i> Register</h2>
+    <div class="subtitle">Create your account</div>
+
+    {% if error %}
+    <div class="error-msg">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/register" autocomplete="off">
+        <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required 
+                   autocomplete="new-username" autocorrect="off" autocapitalize="none" spellcheck="false">
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" required 
+                   autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false">
+        </div>
+        <button type="submit" class="register-btn"><i class="fa-solid fa-arrow-right"></i> Register</button>
+    </form>
+
+    <div class="login-link">
+        Already have an account? <a href="/login">Login</a>
+    </div>
+</div>
+</body>
+</html>

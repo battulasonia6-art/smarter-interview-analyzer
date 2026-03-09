@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smarter Interview Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;background: linear-gradient(to right,#7c8cff 0%,#cfd5ff 50%,#7c8cff 100%);}
+.bg-wrapper{position:absolute;width:90%;height:100%;background:url('{{ url_for("static", filename="login-bg.jpg") }}') no-repeat center center;background-size:contain;}
+.header-title{position:absolute;top:23%;left:51%;transform:translate(-50%, -50%);}
+.header-title .smarter{font-family:'Playfair Display', serif;font-size:40px;font-weight:700;color:#1e2a5a;}
+.header-title .analyzer{font-family:'Poppins', sans-serif;font-size:36px;font-weight:600;color:#1e2a5a;margin-top:-4px;}
+.login-area{position:absolute;top:58%;left:58.5%;transform:translate(-50%, -50%);width:360px;background:rgba(255,255,255,0.1);border-radius:12px;padding:25px;font-family:'Poppins', sans-serif;}
+.login-area h2{font-size:22px;font-weight:700;color:#1f2d6b;margin-bottom:10px;}
+.subtitle{font-size:14px;color:#555;margin-bottom:15px;border-bottom:1px solid rgba(0,0,0,0.15);padding-bottom:8px;}
+.input-group{position:relative;margin-bottom:15px;}
+.input-group i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#666;}
+.input-group input{width:100%;padding:10px 10px 10px 35px;border:1px solid #ccc;border-radius:6px;}
+.login-btn{width:100%;padding:11px;border:none;border-radius:6px;background:#3a4ed5;color:white;font-weight:600;cursor:pointer;margin-top:5px;}
+.login-divider{height:1px;background:rgba(0,0,0,0.15);margin-top:12px;}
+.register{margin-top:10px;text-align:center;font-size:14px;}
+.register a{color:#3a4ed5;font-weight:600;text-decoration:none;}
+.error-msg{color:red;font-size:14px;margin-bottom:10px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="bg-wrapper"></div>
+<div class="header-title">
+<div class="smarter">Smarter</div>
+<div class="analyzer">Interview Analyzer</div>
+</div>
+<div class="login-area">
+{% if error %}
+<div class="error-msg">{{ error }}</div>
+{% endif %}
+<form method="POST" action="/login" autocomplete="off">
+<h2><i class="fa-solid fa-circle-user"></i> Welcome Back</h2>
+<div class="subtitle">Elevate your interview confidence with AI.</div>
+<div class="input-group">
+<i class="fa-solid fa-user"></i>
+<input type="text" name="username" placeholder="Username" required autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+</div>
+<div class="input-group">
+<i class="fa-solid fa-lock"></i>
+<input type="password" name="password" placeholder="Password" required autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false">
+</div>
+<button type="submit" class="login-btn">
+<i class="fa-solid fa-arrow-right"></i> Login
+</button>
+</form>
+<div class="login-divider"></div>
+<div class="register">
+New user? <a href="/register">Register</a>
+</div>
+</div>
+</body>
+</html>

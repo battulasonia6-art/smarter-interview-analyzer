@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>User Profile</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#14001f,#000000);
+color:white;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.back-btn{
+position:absolute;
+top:20px;
+right:30px;
+text-decoration:none;
+color:white;
+border:1px solid #a855f7;
+padding:8px 16px;
+border-radius:6px;
+font-size:14px;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:#a855f7;
+}
+
+.profile-card{
+
+width:650px;
+height:420px;
+
+background:rgba(0,0,0,0.65);
+
+border:1px solid #a855f7;
+
+border-radius:10px;
+
+padding:30px;
+
+box-shadow:0 0 20px rgba(168,85,247,0.3);
+
+text-align:center;
+
+}
+
+.profile-card h2{
+
+margin-bottom:15px;
+
+font-size:24px;
+
+color:#c084fc;
+
+}
+
+.profile-img{
+
+width:90px;
+height:90px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:2px solid #a855f7;
+
+margin-bottom:10px;
+
+}
+
+.input-box{
+
+width:80%;
+
+padding:8px;
+
+margin:6px 0;
+
+border-radius:6px;
+
+border:1px solid #a855f7;
+
+background:#111;
+
+color:white;
+
+}
+
+.details-box{
+
+border:1px solid #a855f7;
+
+border-radius:8px;
+
+padding:10px;
+
+margin-top:10px;
+
+background:rgba(0,0,0,0.45);
+
+font-size:14px;
+
+}
+
+.save-btn{
+
+margin-top:12px;
+
+background:#7c3aed;
+
+border:none;
+
+color:white;
+
+padding:10px 24px;
+
+border-radius:6px;
+
+cursor:pointer;
+
+font-size:14px;
+
+}
+
+.save-btn:hover{
+
+background:#9333ea;
+
+}
+
+/* SAVED POPUP */
+
+#savedPopup{
+position:fixed;
+bottom:30px;
+background:#7c3aed;
+padding:10px 20px;
+border-radius:6px;
+display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="/dashboard" class="back-btn">Back to Dashboard</a>
+
+<div class="profile-card">
+
+<h2>👤 Profile</h2>
+
+<form id="profileForm" action="/save_profile" method="POST" enctype="multipart/form-data">
+
+<img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="profile-img" id="preview">
+
+<br>
+
+<input type="file" name="profile_image" accept="image/*" onchange="loadImage(event)">
+
+<br>
+
+<input
+class="input-box"
+type="text"
+name="username"
+placeholder="Username"
+value="{{ username }}"
+>
+
+<br>
+
+<input
+class="input-box"
+type="email"
+name="email"
+placeholder="Email"
+value="{{ email }}"
+>
+
+<div class="details-box">
+
+<b>User Details</b>
+
+<p>
+
+{% if user_details %}
+
+{{ user_details }}
+
+{% else %}
+
+No details available
+
+{% endif %}
+
+</p>
+
+</div>
+
+<button class="save-btn">Save</button>
+
+</form>
+
+</div>
+
+<div id="savedPopup">Saved</div>
+
+<script>
+
+function loadImage(event){
+let image=document.getElementById('preview');
+image.src=URL.createObjectURL(event.target.files[0]);
+}
+
+/* SAVE WITHOUT REDIRECT */
+
+document.getElementById("profileForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let formData = new FormData(this);
+
+fetch("/save_profile",{
+method:"POST",
+body:formData
+}).then(res=>res.json()).then(data=>{
+
+let popup=document.getElementById("savedPopup");
+
+popup.style.display="block";
+
+setTimeout(()=>{
+popup.style.display="none";
+},2000);
+
+});
+
+});
+
+</script>
+
+</body>
+
+</html>

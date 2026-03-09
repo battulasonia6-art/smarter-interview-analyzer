@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Resume</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#14001f,#000000);
+color:white;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+.back-btn{
+position:absolute;
+top:20px;
+right:30px;
+text-decoration:none;
+color:white;
+border:1px solid #a855f7;
+padding:8px 16px;
+border-radius:6px;
+font-size:14px;
+transition:0.3s;
+}
+.back-btn:hover{ background:#a855f7; }
+.resume-card{
+width:650px;
+height:500px;
+background:rgba(0,0,0,0.65);
+border:1px solid #a855f7;
+border-radius:10px;
+padding:10px;
+text-align:center;
+box-shadow:0 0 20px rgba(168,85,247,0.3);
+display:flex;
+flex-direction:column;
+position:relative;
+}
+.resume-card h2{
+margin:0;
+padding:10px 0;
+color:#c084fc;
+font-size:24px;
+border-bottom:1px solid #a855f7;
+}
+#uploadSection{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+input[type="file"]{
+width:90%;
+padding:8px;
+margin-bottom:15px;
+border-radius:5px;
+border:1px solid #a855f7;
+background:#0d0d0d;
+color:white;
+}
+.upload-btn{
+background:#7c3aed;
+border:none;
+color:white;
+padding:10px 22px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+}
+.upload-btn:hover{ background:#9333ea; }
+.tagline{ margin-top:20px;font-size:13px;color:#bdbdbd;text-align:center;width:90%; }
+.ai-illustration{
+margin-top:20px;width:100%;display:flex;justify-content:center;
+}
+.resume-preview-container{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+position:relative;
+}
+.resume-preview-container iframe{
+flex:1;
+width:100%;
+border:none;
+}
+.delete-btn{
+background:#e11d48;
+border:none;
+color:white;
+padding:8px 18px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+margin-top:10px;
+align-self:center;
+width:120px;
+}
+.delete-btn:hover{ background:#f43f5e; }
+</style>
+</head>
+
+<body>
+
+<a href="/dashboard" class="back-btn">Back to Dashboard</a>
+
+<div class="resume-card" id="resumeCard">
+
+<h2>📄 Upload Your Resume</h2>
+
+<div id="uploadSection">
+<form id="uploadForm" enctype="multipart/form-data">
+<input type="file" name="resumeFile" id="resumeFile" required>
+<br>
+<button class="upload-btn" type="submit">Upload</button>
+</form>
+
+<p class="tagline">
+Upload your resume to get AI-powered analysis and improve your interview readiness.
+</p>
+
+<div class="ai-illustration">
+<svg width="420" height="200" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="20" width="120" height="160" rx="8" fill="#1f1f1f" stroke="#a855f7" stroke-width="2"/>
+<line x1="55" y1="50" x2="145" y2="50" stroke="#c084fc" stroke-width="3"/>
+<line x1="55" y1="70" x2="145" y2="70" stroke="#c084fc" stroke-width="2"/>
+<line x1="55" y1="90" x2="145" y2="90" stroke="#c084fc" stroke-width="2"/>
+<line x1="55" y1="110" x2="145" y2="110" stroke="#c084fc" stroke-width="2"/>
+<line x1="55" y1="130" x2="145" y2="130" stroke="#c084fc" stroke-width="2"/>
+<circle cx="300" cy="100" r="45" fill="#1a1a1a" stroke="#a855f7" stroke-width="2"/>
+<circle cx="300" cy="80" r="4" fill="#c084fc"/>
+<circle cx="280" cy="100" r="4" fill="#c084fc"/>
+<circle cx="320" cy="100" r="4" fill="#c084fc"/>
+<circle cx="300" cy="120" r="4" fill="#c084fc"/>
+<line x1="300" y1="80" x2="280" y2="100" stroke="#c084fc"/>
+<line x1="300" y1="80" x2="320" y2="100" stroke="#c084fc"/>
+<line x1="280" y1="100" x2="300" y2="120" stroke="#c084fc"/>
+<line x1="320" y1="100" x2="300" y2="120" stroke="#c084fc"/>
+<line x1="160" y1="100" x2="255" y2="100" stroke="#a855f7" stroke-width="3" stroke-dasharray="6,6"/>
+</svg>
+</div>
+</div>
+
+<div class="resume-preview-container" id="resumePreviewContainer"></div>
+
+</div>
+
+<script>
+const uploadForm = document.getElementById("uploadForm");
+const uploadSection = document.getElementById("uploadSection");
+const resumePreviewContainer = document.getElementById("resumePreviewContainer");
+
+uploadForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    const fileInput = document.getElementById("resumeFile");
+    const file = fileInput.files[0];
+    if(!file) return alert("Please select a PDF file.");
+
+    const formData = new FormData();
+    formData.append("resumeFile", file);
+
+    fetch("/upload_resume", {
+        method:"POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.error) return alert(data.error);
+
+        // Hide upload section
+        uploadSection.style.display = "none";
+
+        // Fill entire card with resume iframe
+        resumePreviewContainer.innerHTML = `
+            <iframe src="${data.url}"></iframe>
+            <button class="delete-btn" id="deleteResumeBtn">Delete Resume</button>
+        `;
+
+        const iframe = resumePreviewContainer.querySelector("iframe");
+        const deleteBtn = document.getElementById("deleteResumeBtn");
+
+        // Make iframe take full remaining height
+        function resizeIframe(){
+            const cardHeight = document.getElementById("resumeCard").clientHeight;
+            const headerHeight = document.querySelector(".resume-card h2").offsetHeight;
+            const btnHeight = deleteBtn.offsetHeight + 20; // margin
+            iframe.style.height = (cardHeight - headerHeight - btnHeight) + "px";
+        }
+        window.addEventListener("resize", resizeIframe);
+        resizeIframe();
+
+        deleteBtn.addEventListener("click", function(){
+            resumePreviewContainer.innerHTML = "";
+            uploadSection.style.display = "flex";
+        });
+
+    })
+    .catch(err => { console.error(err); alert("Upload failed."); });
+});
+</script>
+
+</body>
+</html>

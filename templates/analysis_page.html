@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Analysis</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#14001f,#000000);
+color:white;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.back-btn{
+position:absolute;
+top:20px;
+right:30px;
+text-decoration:none;
+color:white;
+border:1px solid #a855f7;
+padding:8px 16px;
+border-radius:6px;
+font-size:14px;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:#a855f7;
+}
+
+.analysis-card{
+width:650px;
+height:420px;
+background:rgba(0,0,0,0.65);
+border:1px solid #a855f7;
+border-radius:10px;
+padding:35px;
+text-align:center;
+box-shadow:0 0 20px rgba(168,85,247,0.3);
+}
+
+.analysis-card h2{
+margin-bottom:20px;
+font-size:24px;
+color:#c084fc;
+}
+
+.analysis-box{
+border:1px solid #a855f7;
+border-radius:8px;
+padding:12px;
+margin-bottom:18px;
+background:rgba(0,0,0,0.45);
+}
+
+#analysisChart{
+max-height:150px;
+}
+
+.download-btn{
+background:#7c3aed;
+border:none;
+color:white;
+padding:10px 24px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+display:block;
+margin:12px auto 0;
+}
+
+.download-btn:hover{
+background:#9333ea;
+}
+
+</style>
+</head>
+
+<body>
+
+<a href="/dashboard" class="back-btn">Back to Dashboard</a>
+
+<div class="analysis-card">
+
+<h2>🎤 Interview Analysis</h2>
+
+<div class="analysis-box">
+<h3>Text Analysis Report</h3>
+
+<p>
+{% if analysis_text %}
+{{ analysis_text }}
+{% else %}
+0
+{% endif %}
+</p>
+
+</div>
+
+<div class="analysis-box">
+<h3>Graph Analysis</h3>
+<canvas id="analysisChart"></canvas>
+</div>
+
+<form action="/download_analysis" method="POST">
+<button class="download-btn">Download Report</button>
+</form>
+
+</div>
+
+<script>
+
+/* VALUES ONLY FROM BACKEND ANALYSIS */
+
+let resumeScore = Number("{{ resume_score | default(0) }}");
+let answerScore = Number("{{ answer_score | default(0) }}");
+
+const ctx = document.getElementById('analysisChart');
+
+new Chart(ctx, {
+
+type:'line',
+
+data:{
+labels:['Resume Relevance','Answer Relevance'],
+datasets:[{
+label:'Resume vs Answer Match',
+data:[resumeScore,answerScore],
+borderColor:'#a855f7',
+backgroundColor:'rgba(168,85,247,0.3)',
+borderWidth:2,
+tension:0.3
+}]
+},
+
+options:{
+plugins:{
+legend:{
+labels:{color:"#ffffff"}
+}
+},
+scales:{
+y:{
+beginAtZero:true,
+grid:{color:"#555"},
+ticks:{color:"#ffffff"}
+},
+x:{
+grid:{color:"#555"},
+ticks:{color:"#ffffff"}
+}
+}
+}
+
+});
+
+</script>
+
+</body>
+</html>

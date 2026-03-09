@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div style="display:flex;align-items:center;">
+<div class="title">Smarter Interview Analyzer</div>
+<div class="brain">🧠</div>
+</div>
+
+<div class="navicons">
+<a href="/upload_resume_page">📄</a>
+<a href="/analysis_page">📊</a>
+<a href="/profile_page">👤</a>
+<a href="#" onclick="toggleMode()">🌗</a>
+<a href="#" id="homeIcon" onclick="showLogoutButton()">🏠</a>
+<button id="logoutConfirmBtn" onclick="logout()" style="display:none;margin-top:5px;">Logout</button>
+</div>
+
+</div>
+
+<hr id="dashboardLine">
+
+<div class="topgrid">
+
+<div class="card squarecard">
+<h2 style="text-align:center;">📤 Upload Resume</h2>
+
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;">
+<input type="file" id="resumeFile" style="margin:6px 0 8px 0;border:1px solid #000;padding:6px;border-radius:6px;width:80%;">
+<button onclick="uploadResumeFile()" style="padding:8px 16px;border-radius:8px;">Upload</button>
+<p class="tagline">Upload your resume to get a score and insights</p>
+</div>
+</div>
+
+<div class="card squarecard">
+<div style="position:relative;">
+<textarea id="answerText" rows="7" placeholder="Type your interview answer here"></textarea>
+<div style="position:absolute;top:10px;right:10px;display:flex;gap:5px;">
+<span onclick="startVoice()" class="icon-square">🎤</span>
+<span onclick="sendAnswer()" class="icon-square">📩</span>
+</div>
+</div>
+
+<p class="tagline">AI feedback on clarity, confidence and structure</p>
+<button onclick="analyzeAnswer()" style="margin-top:10px;width:40%;padding:10px;font-size:16px;display:block;margin-left:auto;margin-right:auto;">Analyze</button>
+</div>
+
+</div>
+
+<div class="bottomgrid">
+
+<div class="card rectcard">
+<h3 style="text-align:center;">📊 Resume Score</h3>
+<div class="score-bar">
+<div id="resumeScoreFill" class="score-fill"></div>
+</div>
+<p id="resumeScoreText" style="text-align:center;">0%</p>
+</div>
+
+<div class="card rectcard">
+<h3 style="text-align:center;">📈 Answer Score</h3>
+<div class="score-bar">
+<div id="answerScoreFill" class="score-fill"></div>
+</div>
+<p id="answerScoreText" style="text-align:center;">0%</p>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
