@@ -192,16 +192,22 @@ font-size:22px;
 border:1px solid rgba(0,0,0,0.3);
 }
 
-/* ===== DASHBOARD MOBILE ALIGNMENT FIX ===== */
-
+/* ===== MOBILE DASHBOARD + RESUME FIX ===== */
 @media (max-width:768px){
 
 body{
-padding-top:20px;
+padding:15px;
 }
 
 .container{
-margin-top:20px;
+margin:15px auto;
+padding:15px;
+}
+
+.header{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
 }
 
 .topgrid,
@@ -210,17 +216,19 @@ grid-template-columns:1fr;
 gap:15px;
 }
 
-}
-@media (max-width:768px){
-
-input[type="file"]{
-width:100%;
-box-sizing:border-box;
+.squarecard,
+.rectcard{
+height:auto;
 }
 
+input[type="file"],
 textarea{
 width:100%;
 box-sizing:border-box;
+}
+
+button{
+max-width:100%;
 }
 
 }
