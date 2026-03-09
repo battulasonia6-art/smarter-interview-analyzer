@@ -225,3 +225,17 @@ font-size:22px;
 }
 
 }
+/* LOGIN PAGE MOBILE FIX */
+@media (max-width:768px){
+
+.login-container{
+width:90%;
+margin:auto;
+padding:20px;
+}
+
+.login-container input{
+width:100%;
+}
+
+}
