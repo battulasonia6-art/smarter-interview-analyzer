@@ -237,6 +237,7 @@ def analyze_answer_route():
         "score": answer_score
     })
 
+
 @app.route("/download_analysis", methods=["GET","POST"])
 def download_analysis():
 
@@ -251,7 +252,6 @@ def download_analysis():
     pdf.set_font("Arial","",12)
     pdf.ln(5)
 
-    # Safe text conversion (prevents unicode errors)
     def safe_text(text):
         if not text:
             return ""
@@ -265,16 +265,15 @@ def download_analysis():
     pdf.cell(0,10,f"Answer Similarity Score: {answer_score}",0,1)
     pdf.multi_cell(0,10,safe_text(answer_text))
 
-    # Correct way to send PDF in Flask
-    pdf_bytes = pdf.output(dest="S").encode("latin-1")
+    # Save PDF temporarily
+    file_path = "analysis_report.pdf"
+    pdf.output(file_path)
 
     return send_file(
-        BytesIO(pdf_bytes),
+        file_path,
         as_attachment=True,
-        download_name="analysis_report.pdf",
-        mimetype="application/pdf"
+        download_name="analysis_report.pdf"
     )
-
 
 
 if __name__ == "__main__":
