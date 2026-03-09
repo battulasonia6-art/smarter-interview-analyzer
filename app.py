@@ -237,14 +237,12 @@ def analyze_answer_route():
         "score": answer_score
     })
 
-
 @app.route("/download_analysis", methods=["GET","POST"])
 def download_analysis():
 
     global resume_score, answer_score, resume_text, answer_text
 
     pdf = FPDF()
-
     pdf.add_page()
 
     pdf.set_font("Arial","B",16)
@@ -253,23 +251,30 @@ def download_analysis():
     pdf.set_font("Arial","",12)
     pdf.ln(5)
 
+    # Safe text conversion (prevents unicode errors)
+    def safe_text(text):
+        if not text:
+            return ""
+        return text.encode("latin-1","replace").decode("latin-1")
+
     pdf.cell(0,10,f"Resume Score: {resume_score}",0,1)
-    pdf.multi_cell(0,10,resume_text[:2000])
+    pdf.multi_cell(0,10,safe_text(resume_text[:2000]))
 
     pdf.ln(5)
 
     pdf.cell(0,10,f"Answer Similarity Score: {answer_score}",0,1)
-    pdf.multi_cell(0,10,answer_text)
+    pdf.multi_cell(0,10,safe_text(answer_text))
 
-    pdf_bytes = pdf.output(dest='S').encode('latin1')
-    pdf_output = BytesIO(pdf_bytes)
+    # Correct way to send PDF in Flask
+    pdf_bytes = pdf.output(dest="S").encode("latin-1")
 
     return send_file(
-        pdf_output,
+        BytesIO(pdf_bytes),
         as_attachment=True,
         download_name="analysis_report.pdf",
         mimetype="application/pdf"
     )
+
 
 
 if __name__ == "__main__":
