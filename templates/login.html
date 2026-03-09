@@ -24,6 +24,48 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:center;ove
 .register{margin-top:10px;text-align:center;font-size:14px;}
 .register a{color:#3a4ed5;font-weight:600;text-decoration:none;}
 .error-msg{color:red;font-size:14px;margin-bottom:10px;text-align:center;}
+/* ===== MOBILE FIX (DO NOT CHANGE ABOVE STYLES) ===== */
+@media (max-width:768px){
+
+body{
+overflow:auto;
+padding:20px;
+}
+
+.bg-wrapper{
+width:100%;
+background-size:cover;
+opacity:0.25;
+}
+
+.header-title{
+position:relative;
+top:auto;
+left:auto;
+transform:none;
+text-align:center;
+margin-bottom:20px;
+}
+
+.header-title .smarter{
+font-size:32px;
+}
+
+.header-title .analyzer{
+font-size:28px;
+}
+
+.login-area{
+position:relative;
+top:auto;
+left:auto;
+transform:none;
+width:100%;
+max-width:380px;
+margin:auto;
+}
+
+}
 </style>
 </head>
 <body>
