@@ -191,16 +191,40 @@ font-size:22px;
 #dashboardLine{
 border:1px solid rgba(0,0,0,0.3);
 }
-/* MOBILE FIX */
+/* ---------- FINAL MOBILE FIX ---------- */
 
 @media (max-width:768px){
 
+body{
+padding:15px;
+}
+
+.container{
+width:100%;
+max-width:100%;
+margin-top:30px;
+}
+
+.header{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+.navicons{
+margin-top:8px;
+}
+
 .topgrid{
+display:grid;
 grid-template-columns:1fr;
+gap:15px;
 }
 
 .bottomgrid{
+display:grid;
 grid-template-columns:1fr;
+gap:15px;
 }
 
 .squarecard{
@@ -211,31 +235,17 @@ height:auto;
 height:auto;
 }
 
-.container{
-margin:15px;
-padding:15px;
+textarea{
+font-size:16px;
 }
 
-.title{
-font-size:24px;
-}
-
-.navicons a{
-font-size:22px;
-}
-
-}
-/* LOGIN PAGE MOBILE FIX */
-@media (max-width:768px){
-
-.login-container{
-width:90%;
-margin:auto;
-padding:20px;
-}
-
-.login-container input{
+input[type="file"]{
 width:100%;
+}
+
+button{
+width:100%;
+margin-top:10px;
 }
 
 }
