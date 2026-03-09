@@ -197,27 +197,20 @@ border:1px solid rgba(0,0,0,0.3);
 @media (max-width:768px){
 
 .container{
-margin:10px;
-padding:15px;
+max-width:95%;
+margin:20px auto;
+padding:18px;
 }
 
 .header{
 flex-direction:column;
-align-items:flex-start;
+align-items:center;
+text-align:center;
 gap:10px;
 }
 
-.title{
-font-size:26px;
-}
-
-.brain{
-font-size:32px;
-}
-
-.navicons a{
-font-size:22px;
-margin-left:10px;
+.navicons{
+margin-top:10px;
 }
 
 .topgrid{
