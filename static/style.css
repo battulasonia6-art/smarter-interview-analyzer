@@ -191,22 +191,23 @@ font-size:22px;
 #dashboardLine{
 border:1px solid rgba(0,0,0,0.3);
 }
-/* ===== FINAL MOBILE FIX FOR LOGIN + DASHBOARD ===== */
+/* ===== COMPLETE MOBILE FIX ===== */
 
 @media (max-width:768px){
 
 body{
 margin:0;
-padding:0;
+padding:15px;
 min-height:100vh;
-display:flex;
-flex-direction:column;
+display:block;
 }
 
 .container{
-width:92%;
-margin:20px auto;
-padding:18px;
+max-width:100%;
+width:100%;
+margin:15px auto;
+padding:15px;
+box-sizing:border-box;
 }
 
 .header{
@@ -221,17 +222,27 @@ margin-top:8px;
 
 .topgrid,
 .bottomgrid{
+display:grid;
 grid-template-columns:1fr;
-gap:16px;
+gap:15px;
 }
 
 .squarecard,
 .rectcard{
 height:auto;
+min-height:auto;
+}
+
+.card{
+width:100%;
 }
 
 textarea{
 font-size:16px;
+}
+
+input[type="file"]{
+width:100%;
 }
 
 button{
