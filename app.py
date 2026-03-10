@@ -4,8 +4,7 @@ from PyPDF2 import PdfReader
 from io import BytesIO
 from fpdf import FPDF
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+
 
 UPLOAD_FOLDER = 'upload'
 ALLOWED_EXTENSIONS = {'pdf'}
@@ -58,18 +57,17 @@ def calculate_similarity(resume_text, answer_text):
     if not resume_text.strip() or not answer_text.strip():
         return 0
 
-    documents = [resume_text, answer_text]
+    resume_words = set(resume_text.lower().split())
+    answer_words = set(answer_text.lower().split())
 
-    vectorizer = TfidfVectorizer(stop_words="english")
+    common_words = resume_words.intersection(answer_words)
 
-    tfidf_matrix = vectorizer.fit_transform(documents)
+    if len(resume_words) == 0:
+        return 0
 
-    similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
+    score = (len(common_words) / len(resume_words)) * 100
 
-    score = round(float(similarity[0][0]) * 100, 2)
-
-    return score
-
+    return round(score,2)
 
 def generate_analysis_text(resume_score, answer_score):
 
