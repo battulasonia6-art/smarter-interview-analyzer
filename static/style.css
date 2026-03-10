@@ -192,28 +192,16 @@ font-size:22px;
 border:1px solid rgba(0,0,0,0.3);
 }
 
-/* ===== MOBILE DASHBOARD + RESUME FIX ===== */
 @media (max-width:768px){
 
-body{
-padding:15px;
-}
-
 .container{
-margin:15px auto;
-padding:15px;
-}
-
-.header{
-flex-direction:column;
-align-items:flex-start;
-gap:10px;
+margin:30px auto;
+padding-bottom:30px;
 }
 
 .topgrid,
 .bottomgrid{
 grid-template-columns:1fr;
-gap:15px;
 }
 
 .squarecard,
@@ -221,14 +209,7 @@ gap:15px;
 height:auto;
 }
 
-input[type="file"],
-textarea{
-width:100%;
-box-sizing:border-box;
 }
-
-button{
+input[type="file"]{
 max-width:100%;
-}
-
 }
