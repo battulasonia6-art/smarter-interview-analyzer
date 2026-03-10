@@ -19,6 +19,10 @@ function uploadResumeFile(){
 
     let formData = new FormData();
     formData.append("resumeFile", fileInput.files[0]);
+    let jobDesc = document.getElementById("jobDescription");
+if(jobDesc){
+    formData.append("job_description", jobDesc.value);
+}
 
     fetch("/upload_resume",{
         method:"POST",

@@ -106,17 +106,20 @@ background:#9333ea;
 </p>
 
 </div>
-
 <div class="analysis-box">
-<h3>Graph Analysis</h3>
-<canvas id="analysisChart"></canvas>
+
+<h3>Resume Improvement Suggestions</h3>
+
+<ul>
+
+{% for s in suggestions %}
+<li>{{ s }}</li>
+{% endfor %}
+
+</ul>
+
 </div>
 
-<form action="/download_analysis" method="POST">
-<button class="download-btn">Download Report</button>
-</form>
-
-</div>
 
 <script>
 
@@ -132,10 +135,10 @@ new Chart(ctx, {
 type:'line',
 
 data:{
-labels:['Resume Relevance','Answer Relevance'],
+labels:['Resume','Answer','Grammar','Confidence','Clarity'],
 datasets:[{
-label:'Resume vs Answer Match',
-data:[resumeScore,answerScore],
+label:'Analysis Scores',
+data:[resumeScore,answerScore,70,65,60],
 borderColor:'#a855f7',
 backgroundColor:'rgba(168,85,247,0.3)',
 borderWidth:2,
@@ -144,6 +147,7 @@ tension:0.3
 },
 
 options:{
+responsive:true,
 plugins:{
 legend:{
 labels:{color:"#ffffff"}
@@ -152,6 +156,7 @@ labels:{color:"#ffffff"}
 scales:{
 y:{
 beginAtZero:true,
+max:100,
 grid:{color:"#555"},
 ticks:{color:"#ffffff"}
 },
@@ -163,7 +168,6 @@ ticks:{color:"#ffffff"}
 }
 
 });
-
 </script>
 
 </body>

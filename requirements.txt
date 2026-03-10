@@ -1,5 +1,6 @@
-Flask
+numpy==1.26.4
+scikit-learn==1.4.2
+language-tool-python
 PyPDF2
 fpdf
-scikit-learn
-gunicorn
+flask
