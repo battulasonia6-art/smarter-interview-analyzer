@@ -12,6 +12,7 @@ ALLOWED_EXTENSIONS = {'pdf'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 

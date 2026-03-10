@@ -194,12 +194,19 @@ uploadForm.addEventListener("submit", function(e){
             iframe.style.height = (cardHeight - headerHeight - btnHeight) + "px";
         }
         window.addEventListener("resize", resizeIframe);
-        resizeIframe();
+        resizeIframe();deleteBtn.addEventListener("click", function(){
 
-        deleteBtn.addEventListener("click", function(){
-            resumePreviewContainer.innerHTML = "";
-            uploadSection.style.display = "flex";
-        });
+fetch("/delete_resume",{
+method:"POST"
+})
+.then(res=>res.json())
+.then(data=>{
+resumePreviewContainer.innerHTML = "";
+uploadSection.style.display = "flex";
+});
+});
+
+        
 
     })
     .catch(err => { console.error(err); alert("Upload failed."); });
