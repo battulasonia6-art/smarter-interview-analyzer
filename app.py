@@ -6,22 +6,6 @@ from fpdf import FPDF
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-def extract_skills(text):
-
-    skills_list = [
-        "python","java","c++","sql","flask","django","machine learning",
-        "deep learning","data analysis","pandas","numpy","tensorflow",
-        "html","css","javascript","react","node","api","docker","aws"
-    ]
-
-    found = []
-    text_lower = text.lower()
-
-    for skill in skills_list:
-        if skill in text_lower:
-            found.append(skill)
-
-    return found
 
 UPLOAD_FOLDER = 'upload'
 ALLOWED_EXTENSIONS = {'pdf'}
@@ -38,31 +22,12 @@ answer_text = ""
 
 profile_name = ""
 profile_email = ""
-def resume_improvement(resume_text):
-
-    suggestions = []
-
-    text = resume_text.lower()
-
-    if "projects" not in text:
-        suggestions.append("Add a projects section to highlight practical work.")
-
-    if "skills" not in text:
-        suggestions.append("Include a skills section listing programming tools and technologies.")
-
-    if "experience" not in text:
-        suggestions.append("Add internship or work experience.")
-
-    if len(resume_text.split()) < 200:
-        suggestions.append("Increase resume details with achievements and project descriptions.")
-
-    return suggestions
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def analyze_resume(file_path, job_description=""):
+def analyze_resume(file_path):
 
     reader = PdfReader(file_path)
     text = ""
@@ -82,23 +47,10 @@ def analyze_resume(file_path, job_description=""):
 
     length_score = min(word_count / 8, 40)
 
-    base_score = section_score + length_score
-
-    # JOB DESCRIPTION MATCH
-    jd_score = 0
-
-    if job_description:
-        documents = [text, job_description]
-
-        vectorizer = TfidfVectorizer(stop_words="english")
-        tfidf_matrix = vectorizer.fit_transform(documents)
-
-        similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
-        jd_score = similarity[0][0] * 40
-
-    score = min(base_score + jd_score, 100)
+    score = min(section_score + length_score, 100)
 
     return round(score,2), text
+
 
 def calculate_similarity(resume_text, answer_text):
 
@@ -116,32 +68,6 @@ def calculate_similarity(resume_text, answer_text):
     score = round(float(similarity[0][0]) * 100, 2)
 
     return score
-
-
-# ADD THIS FUNCTION BELOW
-import language_tool_python
-
-tool = language_tool_python.LanguageTool('en-US')
-
-def advanced_answer_analysis(answer):
-
-    matches = tool.check(answer)
-
-    grammar_errors = len(matches)
-
-    word_count = len(answer.split())
-
-    grammar_score = max(100 - grammar_errors*5, 0)
-
-    confidence_score = min(word_count * 2, 100)
-
-    clarity_score = min(word_count * 1.5, 100)
-
-    return {
-        "grammar": grammar_score,
-        "confidence": confidence_score,
-        "clarity": clarity_score
-    }
 
 
 def generate_analysis_text(resume_score, answer_score):
@@ -216,19 +142,17 @@ def upload_resume_page():
 @app.route("/analysis_page")
 def analysis_page():
 
-    global resume_score, answer_score, resume_text
+    global resume_score, answer_score
 
     analysis_text = generate_analysis_text(resume_score, answer_score)
-
-    suggestions = resume_improvement(resume_text)
 
     return render_template(
         "analysis_page.html",
         resume_score=resume_score,
         answer_score=answer_score,
-        analysis_text=analysis_text,
-        suggestions=suggestions
+        analysis_text=analysis_text
     )
+
 
 @app.route("/profile_page")
 def profile_page():
@@ -270,8 +194,7 @@ def upload_resume():
 
     file.save(filepath)
 
-    job_description = request.form.get("job_description","")
-    resume_score, resume_text = analyze_resume(filepath, job_description)
+    resume_score, resume_text = analyze_resume(filepath)
 
     return jsonify({
         "score": resume_score,
@@ -310,16 +233,10 @@ def analyze_answer_route():
 
     answer_score = calculate_similarity(resume_text, answer_text)
 
-    analysis = advanced_answer_analysis(answer_text)
-
-    analysis = advanced_answer_analysis(answer_text)
-
     return jsonify({
-    "score": answer_score,
-    "grammar": analysis["grammar"],
-    "confidence": analysis["confidence"],
-    "clarity": analysis["clarity"]
-})
+        "score": answer_score
+    })
+
 
 @app.route("/download_analysis", methods=["GET","POST"])
 def download_analysis():
@@ -357,35 +274,7 @@ def download_analysis():
         as_attachment=True,
         download_name="analysis_report.pdf"
     )
-@app.route("/question_page")
-def question_page():
-    return render_template("question_page.html")
-@app.route("/generate_questions", methods=["POST"])
-def generate_questions():
 
-    global resume_text
-
-    data = request.json
-    job_description = data.get("job_description", "")
-
-    if not resume_text:
-        return jsonify({"questions": []})
-
-    combined = resume_text + " " + job_description
-
-    skills = extract_skills(combined)
-
-    questions = []
-
-    for skill in skills[:5]:
-        questions.append(f"Can you explain a project where you used {skill}?")
-        questions.append(f"What challenges did you face while working with {skill}?")
-
-    questions.append("Tell me about a challenging project you worked on.")
-    questions.append("How do you handle tight deadlines in projects?")
-    questions.append("Why are you interested in this role?")
-
-    return jsonify({"questions": questions})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
